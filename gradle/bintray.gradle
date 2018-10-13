@@ -1,3 +1,5 @@
+import com.google.common.base.CaseFormat
+
 apply plugin: 'maven-publish'
 apply plugin: 'com.jfrog.bintray'
 
@@ -25,17 +27,17 @@ bintray {
     publications = ['groovyMaven']
 
     pkg {
-        websiteUrl = "https://github.com/agorapulse/agorapulse/remember"
-        issueTrackerUrl = "https://github.com/agorapulse/remember/issues"
-        vcsUrl = "https://github.com/agorapulse/agorapulse/remember.git"
+        websiteUrl = "https://github.com/musketyr/lusk"
+        issueTrackerUrl = "https://github.com/musketyr/lusk/issues"
+        vcsUrl = "https://github.com/agorapulse/musketyr/lusk.git"
 
-        repo = 'libs' // or your repo name
-        userOrg = 'agorapulse'
+        repo = 'maven' // or your repo name
+        userOrg = 'musketyr'
         name = project.name       // somehow project.* doesn't work in this closure
         desc = project.description
         licenses = ['Apache-2.0']
+        publish = true
     }
-    // dryRun = true // whether to run this as dry-run, without deploying
 }
 
 // custom tasks for creating source/javadoc jars
@@ -54,5 +56,16 @@ artifacts {
 }
 
 String getPropertyOrUseDefault(String propertyName, String defaultValue) {
-    hasProperty(propertyName) ? getProperty(propertyName) : defaultValue
+    if (hasProperty(propertyName)) {
+        return getProperty(propertyName)
+    }
+
+    String envVarName = CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, propertyName)
+    String envValue = System.getenv(envVarName)
+
+    if (envValue) {
+        return envValue
+    }
+
+    return defaultValue
 }
