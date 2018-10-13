@@ -1,0 +1,20 @@
+plugins {
+    id 'groovy'
+}
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile 'org.codehaus.groovy:groovy:2.5.2'
+
+    testCompile 'org.spockframework:spock-core:1.2-groovy-2.5'
+}
+
+version '0.1'
+group 'cz.orany'
+
+
+apply from: 'gradle/bintray.gradle'
+apply from: 'gradle/coveralls.gradle'
