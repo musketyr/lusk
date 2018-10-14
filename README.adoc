@@ -1,6 +1,7 @@
-= Lusk - Spring and Micronaut Bean Generator
+= Lusk - Spring Boot and Micronaut Bean Generator
 
-Download the latest application binary from the releases and execute it against the project directory.
+Download the latest application binary from the releases and execute it against Micronaut
+or Spring Boot Web project directory.
 
 ```
 bin/lusk /Users/myname/projects/some-project
