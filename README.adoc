@@ -7,4 +7,7 @@ or Spring Boot Web project directory.
 bin/lusk /Users/myname/projects/some-project
 ```
 
+By default, 1000 new beans and controllers will be generated into the project accompanied with `HttpSpec.groovy`
+specification to load test the running application.
+
 See inline help for more options.
