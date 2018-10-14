@@ -3,7 +3,7 @@
 image:https://travis-ci.org/musketyr/lusk.svg?branch=master["Build Status", link="https://travis-ci.org/musketyr/lusk"]
 image:https://coveralls.io/repos/github/musketyr/lusk/badge.svg?branch=master["Coverage Status, link=https://coveralls.io/github/musketyr/lusk?branch=master]
 
-Download the latest application binary from the releases and execute it against Micronaut
+Download https://github.com/musketyr/lusk/releases/latest[the latest application binary from the releases] and execute it against Micronaut
 or Spring Boot Web project directory.
 
 ```
