@@ -6,23 +6,12 @@ class NameGeneratorSpec extends Specification {
 
     void 'generate bean names'() {
         given:
-            NameGenerator generator = new NameGenerator()
+            int count = 10
         when:
-            Set<String> names = generator.generateBeanNames(1000)
+            Set<String> names = NameGenerator.generateBeanNames(count)
         then:
-            names.size() == 1000
-            names.unique().size() == 1000
+            names.size() == count
+            names.unique().size() == count
             names.every { it.endsWith('Service') }
-    }
-
-    void 'generate factory names'() {
-        given:
-            NameGenerator generator = new NameGenerator()
-        when:
-            String name = generator.generateFactoryName()
-        then:
-            name
-            name.endsWith('Factory')
-            name != 'Factory'
     }
 }

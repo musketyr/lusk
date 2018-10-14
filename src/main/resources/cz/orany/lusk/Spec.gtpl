@@ -3,13 +3,18 @@ package $pkg
 import com.agorapulse.gru.Gru
 import com.agorapulse.gru.http.Http
 import org.junit.Rule
+import spock.lang.Requires
 import spock.lang.Specification
 import spock.lang.Unroll
 
 @Unroll
+// for manual execution only, skip for CI
+@Requires({ !System.getenv('CI') })
 class HttpSpec extends Specification {
 
     /* TODO: include following into your build.gradle script
+        apply plugin: 'groovy'
+
         repositories {
             maven { url "https://jcenter.bintray.com" }
         }

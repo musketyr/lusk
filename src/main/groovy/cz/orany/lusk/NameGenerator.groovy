@@ -9,29 +9,14 @@ class NameGenerator {
     private static final Range<String> UPPER = 'A'..'Z'
     private static final Range<String> LOWER = 'a'..'z'
     private static final int NAME_LENGTH = 10
+    private static final String BEAN_SUFFIX = 'Service'
 
-    private final String beanSuffix
-    private final String factorySuffix
-
-    NameGenerator(String beanSuffix, String factorySuffix) {
-        this.beanSuffix = beanSuffix
-        this.factorySuffix = factorySuffix
-    }
-
-    NameGenerator() {
-        this('Service', 'Factory')
-    }
-
-    Set<String> generateBeanNames(int count) {
+    static Set<String> generateBeanNames(int count) {
         Set<String> names = new HashSet<>()
         while (names.size() < count) {
-            names.add(generateName() + beanSuffix)
+            names.add(generateName() + BEAN_SUFFIX)
         }
         return names
-    }
-
-    String generateFactoryName() {
-        return generateName() + factorySuffix
     }
 
     private static String generateName() {

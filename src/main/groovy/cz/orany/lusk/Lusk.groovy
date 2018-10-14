@@ -8,7 +8,7 @@ class Lusk {
     private final String srcFolder
     private final String testFolder
     static enum Framework {
-        MICRONAUT, SPRING
+        micronaut, spring
     }
 
     private final Random random = new Random()
@@ -74,5 +74,9 @@ class Lusk {
             chosen.add(input.removeAt(random.nextInt(input.size())))
         }
         return chosen;
+    }
+
+    static void main(String[] args) {
+
     }
 }
