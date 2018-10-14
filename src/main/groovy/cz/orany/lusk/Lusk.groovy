@@ -46,12 +46,12 @@ class Lusk {
 
             rest.remove(randomItems)
 
-            beanSource.text = beanGenerator.generateBean(pkg, it, randomItems)
+            generateFile(beanSource, beanGenerator.generateBean(pkg, it, randomItems))
 
             File controllerSource = new File(pkgDir, it - 'Service' + 'Controller.java')
             controllerSource.createNewFile()
 
-            controllerSource.text = beanGenerator.generateController(pkg, it)
+            generateFile(controllerSource, beanGenerator.generateController(pkg, it))
         }
 
         File testPkgDir = new File(projectRoot, testFolder + File.separator + pkg.split(/\./).join(File.separator))
@@ -60,7 +60,7 @@ class Lusk {
         File specSource = new File(testPkgDir, 'HttpSpec.groovy')
         specSource.createNewFile()
 
-        specSource.text = beanGenerator.generateSpec(pkg, names)
+        generateFile(specSource, beanGenerator.generateSpec(pkg, names))
     }
 
     Set<String> randomItems(Set<String> set) {
@@ -76,7 +76,8 @@ class Lusk {
         return chosen;
     }
 
-    static void main(String[] args) {
-
+    private void generateFile(File file, String content) {
+        println "Generating ${file.canonicalPath.substring(projectRoot.canonicalPath.length())}"
+        file.text = content
     }
 }

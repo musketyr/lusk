@@ -20,16 +20,16 @@ class FrameworkDetector {
         Hint hint = null
 
         sourceRoot.eachFileRecurse {
-            if (it.name == 'Application.java') {
+            if (it.name.startsWith('Application.')) {
                 List<String> lines = it.readLines()
 
-                String pkg = lines.find { it.startsWith('package') }?.getAt([8..-2])?.trim()
+                String pkg = lines.find { it.startsWith('package') }?.getAt([8..-1])?.replace(';', '')?.trim()
 
                 Lusk.Framework framework = null
 
-                if (lines.any { it.contains('import io.micronaut.runtime.Micronaut;') }) {
+                if (lines.any { it.contains('io.micronaut.runtime.Micronaut') }) {
                     framework = Lusk.Framework.micronaut
-                } else if(lines.any { it.contains('import org.springframework.boot.SpringApplication;')}) {
+                } else if(lines.any { it.contains('org.springframework.boot.SpringApplication')}) {
                     framework = Lusk.Framework.spring
                 }
                 if (pkg && framework) {

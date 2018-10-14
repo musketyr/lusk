@@ -14,7 +14,7 @@ class LuskApp implements Runnable {
     String pkg
 
     @CommandLine.Option(names = ["-c", '--count'], description = 'number of beans (default 100)')
-    int count = 100
+    int count = 1000
 
     @CommandLine.Parameters(index = "0", arity = "0..1", paramLabel = 'PROJECT_DIR')
     String path = System.getProperty("user.dir")
@@ -26,17 +26,26 @@ class LuskApp implements Runnable {
     String testSourceDir = 'src/test/groovy'
 
     void run() {
-        File projectDir = new File(path)
-        Hint hint = new Hint(framework, pkg)
-        if (!framework || !pkg) {
-            hint = new FrameworkDetector(projectDir, mainSourceDir).detect()
-            if (!hint) {
-                System.err.println('Framework and package needs to be selected')
+        try {
+            File projectDir = new File(path)
+            Hint hint = new Hint(framework, pkg)
+            if (!framework || !pkg) {
+                hint = new FrameworkDetector(projectDir, mainSourceDir).detect()
+                if (!hint) {
+                    System.err.println('Framework and package needs to be selected')
+                    return
+                }
             }
-            return
+
+            println "*** Generating $count ${hint.framework.toString().capitalize()} beans and corresponding controllers into package ${hint.pkg}... ***"
+
+            new Lusk(projectDir, hint.framework, hint.pkg, mainSourceDir, testSourceDir).generate(count)
+
+            println '\n *** DONE *** \n'
+        } catch(Exception e) {
+            e.printStackTrace()
         }
 
-        new Lusk(projectDir, hint.framework, hint.pkg, mainSourceDir, testSourceDir).generate(count)
     }
 
     static void main(String[] args) {
