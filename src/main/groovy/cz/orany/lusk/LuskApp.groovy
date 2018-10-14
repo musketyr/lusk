@@ -26,26 +26,21 @@ class LuskApp implements Runnable {
     String testSourceDir = 'src/test/groovy'
 
     void run() {
-        try {
-            File projectDir = new File(path)
-            Hint hint = new Hint(framework, pkg)
-            if (!framework || !pkg) {
-                hint = new FrameworkDetector(projectDir, mainSourceDir).detect()
-                if (!hint) {
-                    System.err.println('Framework and package needs to be selected')
-                    return
-                }
+        File projectDir = new File(path)
+        Hint hint = new Hint(framework, pkg)
+        if (!framework || !pkg) {
+            hint = new FrameworkDetector(projectDir, mainSourceDir).detect()
+            if (!hint) {
+                System.err.println('Framework and package needs to be selected')
+                return
             }
-
-            println "*** Generating $count ${hint.framework.toString().capitalize()} beans and corresponding controllers into package ${hint.pkg}... ***"
-
-            new Lusk(projectDir, hint.framework, hint.pkg, mainSourceDir, testSourceDir).generate(count)
-
-            println '\n *** DONE *** \n'
-        } catch(Exception e) {
-            e.printStackTrace()
         }
 
+        println "*** Generating $count ${hint.framework.toString().capitalize()} beans and corresponding controllers into package ${hint.pkg}... ***"
+
+        new Lusk(projectDir, hint.framework, hint.pkg, mainSourceDir, testSourceDir).generate(count)
+
+        println '\n *** DONE *** \n'
     }
 
     static void main(String[] args) {
