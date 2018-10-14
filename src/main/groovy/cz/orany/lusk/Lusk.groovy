@@ -5,33 +5,39 @@ import groovy.transform.CompileStatic
 @CompileStatic
 class Lusk {
 
-    public static enum Framework {
+    private final String srcFolder
+    private final String testFolder
+    static enum Framework {
         MICRONAUT, SPRING
     }
 
     private final Random random = new Random()
-    private final File sourcesRoot
+    private final File projectRoot
     private final String framework
     private final String pkg
 
-    Lusk(File sourcesRoot, Framework framework, String pkg) {
+    Lusk(File projectRoot, Framework framework, String pkg, String srcFolder = 'src/main/java', String testFolder = 'src/test/groovy') {
         this.pkg = pkg
         this.framework = framework.toString().toLowerCase()
-        this.sourcesRoot = sourcesRoot
+        this.projectRoot = projectRoot
+        this.srcFolder = srcFolder
+        this.testFolder = testFolder
     }
 
     void generate(int count) {
         String beanTemplate = getClass().getResourceAsStream(framework + 'Bean.gtpl').text
         String controllerTemplate = getClass().getResourceAsStream(framework + 'Controller.gtpl').text
-        CodeGenerator beanGenerator = new CodeGenerator(beanTemplate, controllerTemplate)
+        String specTemplate = getClass().getResourceAsStream('Spec.gtpl').text
+
+        CodeGenerator beanGenerator = new CodeGenerator(beanTemplate, controllerTemplate, specTemplate)
         Set<String> names = new NameGenerator().generateBeanNames(count)
         Set<String> rest = new LinkedHashSet<>(names)
 
+        File pkgDir = new File(projectRoot, srcFolder + File.separator + pkg.split(/\./).join(File.separator))
+        pkgDir.mkdirs()
+
         names.collect {
             rest.remove(it)
-
-            File pkgDir = new File(sourcesRoot, pkg.split(/\./).join(File.separator))
-            pkgDir.mkdirs()
 
             File beanSource = new File(pkgDir, it + '.java')
             beanSource.createNewFile()
@@ -47,6 +53,14 @@ class Lusk {
 
             controllerSource.text = beanGenerator.generateController(pkg, it)
         }
+
+        File testPkgDir = new File(projectRoot, testFolder + File.separator + pkg.split(/\./).join(File.separator))
+        testPkgDir.mkdirs()
+
+        File specSource = new File(testPkgDir, 'HttpSpec.groovy')
+        specSource.createNewFile()
+
+        specSource.text = beanGenerator.generateSpec(pkg, names)
     }
 
     Set<String> randomItems(Set<String> set) {

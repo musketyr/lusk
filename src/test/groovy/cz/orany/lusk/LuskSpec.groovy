@@ -9,17 +9,19 @@ class LuskSpec extends Specification {
     @Rule TemporaryFolder tmp
 
     void 'generate sources'() {
-        File folder = tmp.newFolder()
         given:
+            File folder = tmp.newFolder()
             Lusk lusk = new Lusk(folder, framework, 'cloud.winterboots.hello')
             int count = 1000
         when:
             lusk.generate(count)
-            File packageFolder = new File(folder, "cloud/winterboots/hello")
+            File srcFolder = new File(folder, "src/main/java/cloud/winterboots/hello")
+            File testFolder = new File(folder, "src/test/groovy/cloud/winterboots/hello")
         then:
-            packageFolder.listFiles().findAll { it.name.endsWith('Service.java') }.size() == count
-            packageFolder.listFiles().findAll { it.name.endsWith('Controller.java') }.size() == count
-	where:
-	    framework << Lusk.Framework.values()
+            srcFolder.listFiles().findAll { it.name.endsWith('Service.java') }.size() == count
+            srcFolder.listFiles().findAll { it.name.endsWith('Controller.java') }.size() == count
+            new File(testFolder, 'HttpSpec.groovy').exists()
+        where:
+            framework << Lusk.Framework.values()
     }
 }

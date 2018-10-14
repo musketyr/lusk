@@ -12,7 +12,7 @@ public class $controllerName {
         this.$beanPropertyName = $beanPropertyName;
     }
 
-    @RequestMapping("/$beanPropertyName")
+    @RequestMapping("/${beanPropertyName - 'Service'}")
     public String index() {
         return ${beanPropertyName}.getGreeting();
     }
