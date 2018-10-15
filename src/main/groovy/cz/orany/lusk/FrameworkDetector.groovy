@@ -20,7 +20,7 @@ class FrameworkDetector {
         Hint hint = null
 
         sourceRoot.eachFileRecurse {
-            if (it.name.startsWith('Application.')) {
+            if (it.name.contains('Application.')) {
                 List<String> lines = it.readLines()
 
                 String pkg = lines.find { it.startsWith('package') }?.getAt([8..-1])?.replace(';', '')?.trim()
@@ -33,7 +33,7 @@ class FrameworkDetector {
                     framework = Lusk.Framework.spring
                 }
                 if (pkg && framework) {
-                    hint = new Hint(framework, pkg)
+                    hint = new Hint(framework, pkg, it.name)
                 }
             }
         }
@@ -45,9 +45,11 @@ class FrameworkDetector {
 class Hint {
     final Lusk.Framework framework
     final String pkg
+    final String applicationClassName
 
-    Hint(Lusk.Framework framework, String pkg) {
+    Hint(Lusk.Framework framework, String pkg, String applicationClassName) {
         this.framework = framework
         this.pkg = pkg
+        this.applicationClassName = applicationClassName
     }
 }

@@ -2,12 +2,12 @@ package cz.orany.lusk
 
 import picocli.CommandLine
 
-@CommandLine.Command(name = 'Lusk', version = '0.2',
+@CommandLine.Command(name = 'Lusk', version = '0.2.1',
     mixinStandardHelpOptions = true, // add --help and --version options
     description = '@|bold Lusk Bean Generator|@')
 class LuskApp implements Runnable {
 
-    @CommandLine.Option(names = ["-f", '--framework'], description = 'projects \'s framework')
+    @CommandLine.Option(names = ["-f", '--framework'], description = 'projects \'s framework [spring|micronaut]')
     Lusk.Framework framework
 
     @CommandLine.Option(names = ["-p", '--package'], description = 'package of generated classes')
@@ -27,7 +27,7 @@ class LuskApp implements Runnable {
 
     void run() {
         File projectDir = new File(path)
-        Hint hint = new Hint(framework, pkg)
+        Hint hint = new Hint(framework, pkg, 'Application.java')
         if (!framework || !pkg) {
             hint = new FrameworkDetector(projectDir, mainSourceDir).detect()
             if (!hint) {

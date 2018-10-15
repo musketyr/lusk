@@ -13,4 +13,25 @@ bin/lusk /Users/myname/projects/some-project
 By default, 1000 new beans and controllers will be generated into the project accompanied with `HttpSpec.groovy`
 specification to load test the running application.
 
-See inline help for more options.
+See inline help `lusk --help` for more options.
+
+== Sample Project Guide
+
+Sample projects can be created with following command
+
+=== Spring Boot
+
+```
+curl https://start.spring.io/starter.tgz -d dependencies=web -d type=gradle-project -d baseDir=boot-sample-app | tar -xzvf -
+cd boot-sample-app
+```
+
+=== Micronaut
+
+```
+curl -s https://get.sdkman.io | bash
+source "$HOME/.sdkman/bin/sdkman-init.sh"
+sdk install micronaut
+mn create-app mn-sample-app
+cd mn-sample-app
+```
