@@ -1,0 +1,10 @@
+
+apply plugin: 'groovy'
+
+repositories {
+    maven { url "https://jcenter.bintray.com" }
+}
+
+dependencies {
+    testCompile "com.agorapulse:gru-http:0.6.6"
+}

@@ -61,6 +61,8 @@ class Lusk {
         specSource.createNewFile()
 
         generateFile(specSource, beanGenerator.generateSpec(pkg, names))
+
+        appendFile(new File(projectRoot, 'build.gradle'), getClass().getResourceAsStream('gru.gradle').text)
     }
 
     Set<String> randomItems(Set<String> set) {
@@ -77,7 +79,18 @@ class Lusk {
     }
 
     private void generateFile(File file, String content) {
-        println "Generating ${file.canonicalPath.substring(projectRoot.canonicalPath.length())}"
+        println "Generating ${shortPath(file)}"
         file.text = content
+    }
+
+    private void appendFile(File file, String text) {
+        if (file.exists()) {
+            println "Appending ${shortPath(file)}"
+            file.append(text)
+        }
+    }
+
+    private String shortPath(File file) {
+        file.canonicalPath.substring(projectRoot.canonicalPath.length())
     }
 }

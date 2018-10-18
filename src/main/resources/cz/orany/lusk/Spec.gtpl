@@ -12,18 +12,6 @@ import spock.lang.Unroll
 @Requires({ !System.getenv('CI') })
 class HttpSpec extends Specification {
 
-    /* TODO: include following into your build.gradle script
-        apply plugin: 'groovy'
-
-        repositories {
-            maven { url "https://jcenter.bintray.com" }
-        }
-
-        dependencies {
-            testCompile "com.agorapulse:gru-http:0.6.6"
-        }
-     */
-
     @Rule Gru<Http> gru = Gru.equip(Http.steal(this)).prepare('http://localhost:8080')
 
     void 'test #name'() {

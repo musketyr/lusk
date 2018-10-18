@@ -1,7 +1,16 @@
 language: groovy
-
 jdk:
 - oraclejdk8
-
 after_success:
-- ./gradlew jacocoTestReport coveralls
+- "./gradlew jacocoTestReport coveralls"
+deploy:
+  provider: releases
+  api_key:
+    secure: dTa2KqxdS0ohdevf2pL8A8bdJ8NABkAxCR1nneydVet7LGxH5Ve9PSdCR5MpsqbNJes+99bPmq322SMcIcwFIp0gRcDBgWSgBmTtMHRtsXfwVMK261KEvwsqjNYs/IjI+iM7PCX5APDdhviOeIy+G4VY70JZ864xRcy1RaMauMzIWTnM6l51kAlDY4pWQiTyDxFqr/yQxdRRKnpdosQ5sO1vtZCPETJ2SoQu279qzDNFkiq9Wi3YJN7xO/T6J9pNpcvZXZmTSDMNkvVIRoiAyk/j77BpkgHyC0U5M6QwRVFxCOLDZA2vwABZPbRZTvmYxnIQG/Y4RFqw+nj9IGTMvAgggQio708J0fge6XwRJPSm+AVLXgDBY2W29mrZ7YeXpBD11sKtHhfu+8FVk5o4p1k5dkxQBeonbd+T3fTfXPkzEMiA7FDh1bpy2+gcofdNbCf2Mf4++5kg2FQv0pMCFHScnGGcROwjlLc5aya9MbI+AamJtKJviW/g0KcPW+gDXVESdYi91cKgwKggjvHlb5+U03sXHCzxIPsRCVqIpN8ai8I1nFn6v+ZoCRMjioIKBFZhuOGJwA9TOxSEzB7HqaIV0AV9QLW6NtfvoAbpCRynl95YxLrAL4eJ+mbo/14JTxlojBhcUMkD7Bsd74v9RxU7yA24PmMD6TYAYCYeWaA=
+  skip_cleanup: true
+  file:
+  - build/distributions/lusk.zip
+  - build/distributions/lusk.tar
+  on:
+    repo: musketyr/lusk
+    tags: true

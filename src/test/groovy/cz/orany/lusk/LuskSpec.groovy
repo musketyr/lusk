@@ -11,7 +11,12 @@ class LuskSpec extends Specification {
     void 'generate sources'() {
         given:
             File folder = tmp.newFolder()
-            Lusk lusk = new Lusk(folder, framework, 'cloud.winterboots.hello')
+
+            File buildFile = new File(folder, 'build.gradle')
+            buildFile.text = '// build file'
+
+            Lusk lusk = new Lusk(folder, framework as Lusk.Framework, 'cloud.winterboots.hello')
+
             int count = 1000
         when:
             lusk.generate(count)
@@ -21,6 +26,7 @@ class LuskSpec extends Specification {
             srcFolder.listFiles().findAll { it.name.endsWith('Service.java') }.size() == count
             srcFolder.listFiles().findAll { it.name.endsWith('Controller.java') }.size() == count
             new File(testFolder, 'HttpSpec.groovy').exists()
+            buildFile.text.contains('gru')
         where:
             framework << Lusk.Framework.values()
     }
