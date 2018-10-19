@@ -17,7 +17,7 @@ dependencies {
     testCompile 'org.spockframework:spock-core:1.2-groovy-2.5'
 }
 
-version '0.2.2'
+version '0.2.3'
 group 'cz.orany'
 
 mainClassName = 'cz.orany.lusk.LuskApp'

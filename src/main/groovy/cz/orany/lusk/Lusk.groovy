@@ -27,9 +27,10 @@ class Lusk {
     void generate(int count) {
         String beanTemplate = getClass().getResourceAsStream(framework + 'Bean.gtpl').text
         String controllerTemplate = getClass().getResourceAsStream(framework + 'Controller.gtpl').text
+        String beanCounterTemplate = getClass().getResourceAsStream(framework + 'BeanCounter.gtpl').text
         String specTemplate = getClass().getResourceAsStream('Spec.gtpl').text
 
-        CodeGenerator beanGenerator = new CodeGenerator(beanTemplate, controllerTemplate, specTemplate)
+        CodeGenerator beanGenerator = new CodeGenerator(beanTemplate, controllerTemplate, beanCounterTemplate, specTemplate)
         Set<String> names = new NameGenerator().generateBeanNames(count)
         Set<String> rest = new LinkedHashSet<>(names)
 
@@ -61,6 +62,11 @@ class Lusk {
         specSource.createNewFile()
 
         generateFile(specSource, beanGenerator.generateSpec(pkg, names))
+
+        File beanCounterSource = new File(pkgDir, 'BeanCounter.java')
+        beanCounterSource.createNewFile()
+
+        generateFile(beanCounterSource, beanGenerator.generateBeanCounter(pkg))
 
         appendFile(new File(projectRoot, 'build.gradle'), getClass().getResourceAsStream('gru.gradle').text)
     }

@@ -38,6 +38,38 @@ class CodeGeneratorSpec extends Specification {
             }
             '''.stripIndent().trim()
 
+    private static final String beanCounterTemplate = '''
+            package $pkg;
+            
+            import io.micronaut.context.ApplicationContext;
+            import io.micronaut.discovery.event.ServiceStartedEvent;
+            import io.micronaut.runtime.event.annotation.EventListener;
+            import io.micronaut.scheduling.annotation.Async;
+            import org.slf4j.Logger;
+            import org.slf4j.LoggerFactory;
+            
+            import javax.inject.Singleton;
+            
+            @Singleton
+            public class BeanCounter {
+            
+                private static final Logger LOG = LoggerFactory.getLogger(BeanCounter.class);
+            
+                private final ApplicationContext context;
+            
+                public BeanCounter(ApplicationContext context) {
+                    this.context = context;
+                }
+            
+                @Async
+                @EventListener
+                void onStartup(ServiceStartedEvent ignored) {
+                    LOG.info("Loaded " + context.getAllBeanDefinitions().size() + " Micronaut beans");
+                }
+            
+            }
+            '''.stripIndent().trim()
+
     private static final String specTemplate = '''
             package $pkg
 
@@ -104,6 +136,39 @@ class CodeGeneratorSpec extends Specification {
             }
             '''.stripIndent().trim()
 
+    // language=Java
+    private static final String expectedBeanCounterTemplate = '''
+            package com.example.beans;
+            
+            import io.micronaut.context.ApplicationContext;
+            import io.micronaut.discovery.event.ServiceStartedEvent;
+            import io.micronaut.runtime.event.annotation.EventListener;
+            import io.micronaut.scheduling.annotation.Async;
+            import org.slf4j.Logger;
+            import org.slf4j.LoggerFactory;
+            
+            import javax.inject.Singleton;
+            
+            @Singleton
+            public class BeanCounter {
+            
+                private static final Logger LOG = LoggerFactory.getLogger(BeanCounter.class);
+            
+                private final ApplicationContext context;
+            
+                public BeanCounter(ApplicationContext context) {
+                    this.context = context;
+                }
+            
+                @Async
+                @EventListener
+                void onStartup(ServiceStartedEvent ignored) {
+                    LOG.info("Loaded " + context.getAllBeanDefinitions().size() + " Micronaut beans");
+                }
+            
+            }
+            '''.stripIndent().trim()
+
     // language=Groovy
     private static final String expectedSpecTemplate = '''
             package com.example.beans
@@ -140,11 +205,12 @@ class CodeGeneratorSpec extends Specification {
 
         when:
 
-            CodeGenerator codeGenerator = new CodeGenerator(beanTemplate, controllerTemplate, specTemplate)
+            CodeGenerator codeGenerator = new CodeGenerator(beanTemplate, controllerTemplate, beanCounterTemplate, specTemplate)
         then:
 
             codeGenerator.generateBean('com.example.beans', 'MyService', ['OtherService', 'AnotherService'] as Set<String>) == expectedBeanCode
             codeGenerator.generateController('com.example.beans', 'MyService') == expectedControllerCode
+            codeGenerator.generateBeanCounter('com.example.beans') == expectedBeanCounterTemplate
             codeGenerator.generateSpec('com.example.beans', ['MyService', 'OtherService', 'AnotherService'] as Set<String>) == expectedSpecTemplate
     }
 

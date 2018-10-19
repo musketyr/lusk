@@ -10,11 +10,13 @@ class CodeGenerator {
     private final SimpleTemplateEngine templateEngine = new SimpleTemplateEngine()
     private final Template beanTemplate
     private final Template controllerTemplate
+    private final Template beanCounterTemplate
     private final Template specTemplate
 
-    CodeGenerator(String beanTemplate, String controllerTemplate, String specTemplate) {
+    CodeGenerator(String beanTemplate, String controllerTemplate, String beanCounterTemplate, String specTemplate) {
         this.beanTemplate = templateEngine.createTemplate(beanTemplate)
         this.controllerTemplate = templateEngine.createTemplate(controllerTemplate)
+        this.beanCounterTemplate = templateEngine.createTemplate(beanCounterTemplate)
         this.specTemplate = templateEngine.createTemplate(specTemplate)
     }
 
@@ -27,6 +29,10 @@ class CodeGenerator {
 
     String generateController(String pkg, String beanName) {
         controllerTemplate.make(pkg: pkg, beanName: beanName, controllerName: beanName - 'Service' + 'Controller', beanPropertyName: beanName[0].toLowerCase() + beanName[1..-1]).toString()
+    }
+
+    String generateBeanCounter(String pkg) {
+        beanCounterTemplate.make(pkg: pkg)
     }
 
     String generateSpec(String pkg, Set<String> names) {
