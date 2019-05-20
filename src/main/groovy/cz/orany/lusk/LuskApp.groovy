@@ -13,7 +13,7 @@ class LuskApp implements Runnable {
     @CommandLine.Option(names = ["-p", '--package'], description = 'package of generated classes')
     String pkg
 
-    @CommandLine.Option(names = ["-c", '--count'], description = 'number of beans (default 100)')
+    @CommandLine.Option(names = ["-c", '--count'], description = 'number of generated singletons and controllers (default 1000)')
     int count = 1000
 
     @CommandLine.Parameters(index = "0", arity = "0..1", paramLabel = 'PROJECT_DIR')
